@@ -2,3 +2,4 @@
 #define POSTFIX_H
 
 #endif
+#include "stack.h"
