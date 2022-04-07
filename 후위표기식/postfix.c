@@ -2,6 +2,35 @@
 #include "postfix.h"
 #include "stack.h"
 
+int Eval(char* Postfix)
+{
+	Stack Operand_stack = Create_stacK();
+	char* token = strtok(Postfix, " ");
+	int result, num1, num2;
+
+	while (token != NULL) {
+		if ('0' <= token[0] && token[0] <= '9')	// token이 피연산자일때
+			Push(Operand_stack, atoi(token));
+		else {	// token이 연산자일때
+			num2 = Pop(Operand_stack);
+			num1 = Pop(Operand_stack);
+
+			switch (token[0]) {
+			case 42: result = num1 * num2; break;
+			case 43: result = num1 + num2; break;
+			case 45: result = num1 - num2; break;
+			case 47: result = num1 / num2; break;
+			}
+			if (Is_empty(Operand_stack))
+				Operand_stack = Create_stacK();
+			Push(Operand_stack, result);
+		}
+		token = strtok(NULL, " ");
+	}
+		
+	return Pop(Operand_stack);
+}
+
 void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 {
 	if (Is_empty(Operator_stack))	// 스택이 비었을시
@@ -22,9 +51,9 @@ void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 					Operator_stack = Create_stacK();
 			}
 			Push(Operator_stack, token[0]);
-			
-			if (Is_empty(Operator_stack))
-				Operator_stack = Create_stacK();
+			//
+			//if (Is_empty(Operator_stack))
+			//	Operator_stack = Create_stacK();
 		}
 	}
 }

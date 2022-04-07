@@ -10,6 +10,7 @@
 
 static char Operator[] = "+-*/";
 
+int Eval(char*);
 void Make_operator_postfix(char*, Stack, char*);
 int Prec(char);
 char* Make_postfix(char*);
