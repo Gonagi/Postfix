@@ -7,10 +7,9 @@
 #include "stack.h"
 #define BUFFER_SIZE 100
 
-static Operator[] = "+-*/";
-Stack Operator_stack;
+static char Operator[] = "+-*/";
 
-void Make_operator_postfix(char*, char*);
+void Make_operator_postfix(char*, Stack, char*);
 int Prec(char);
 char* Make_postfix(char*);
 int Eval(char*);
