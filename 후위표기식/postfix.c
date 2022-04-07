@@ -11,6 +11,21 @@ struct stack {
 	Node top;
 };
 
+void Push_with_Bracket(char* Postfix, Stack Operator_stack)
+{
+	while (Peek(Operator_stack) != '(') {
+		switch (Pop(Operator_stack)) {
+		case 42: strcat(Postfix, "*"); strcat(Postfix, " "); break;
+		case 43: strcat(Postfix, "+"); strcat(Postfix, " "); break;
+		case 45: strcat(Postfix, "-"); strcat(Postfix, " "); break;
+		case 47: strcat(Postfix, "/"); strcat(Postfix, " "); break;
+		}
+	}
+	Pop(Operator_stack);	// '(' Pop
+		if (Is_empty(Operator_stack))
+			Operator_stack = Create_stacK();
+}
+
 bool Is_bracket(Stack Operator_stack)
 {
 	Node n = Operator_stack->top;
@@ -46,39 +61,34 @@ int Eval(char* Postfix)
 			Push(Operand_stack, result);
 		}
 		token = strtok(NULL, " ");
-	}
-		
+	}	
 	return Pop(Operand_stack);
 }
 
 void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 {
-	if (Is_empty(Operator_stack))	// 스택이 비었을시
+	if (Is_empty(Operator_stack) || token[0] == '(')	// 스택이 비었을시 또는 '('일때
 		Push(Operator_stack, token[0]);
 	else {
-
-
-
-
-
-		if (Prec(Peek(Operator_stack)) > Prec(token[0]))		// 스택(+) > 토큰(*)
+		if ((Prec(Peek(Operator_stack)) > Prec(token[0]) || Is_bracket(Operator_stack)) && token[0] != ')')		// 스택(+) > 토큰(*)
 			Push(Operator_stack, token[0]);	// 스택에 * Push
 		else {	// 스택(*) <= 토큰(*+)
-			while (!Is_empty(Operator_stack) && Prec(Peek(Operator_stack)) <= Prec(token[0])) {	// 스택이 비어있지 않은 경우 && \
-																*				+				스택에 있는 연산자의 우선순위가 높을시
-				switch (Pop(Operator_stack)) {
-				case 42: strcat(Postfix, "*"); strcat(Postfix, " "); break;
-				case 43: strcat(Postfix, "+"); strcat(Postfix, " "); break;
-				case 45: strcat(Postfix, "-"); strcat(Postfix, " "); break;
-				case 47: strcat(Postfix, "/"); strcat(Postfix, " "); break;
+			if (token[0] = ')') 	// token이 닫는괄호일때
+				Push_with_Bracket(Postfix, Operator_stack);
+			else {
+				while (!Is_empty(Operator_stack) && Prec(Peek(Operator_stack)) <= Prec(token[0])) {	// 스택이 비어있지 않은 경우 && \
+																		*				+				스택에 있는 연산자의 우선순위가 높을시
+					switch (Pop(Operator_stack)) {
+					case 42: strcat(Postfix, "*"); strcat(Postfix, " "); break;
+					case 43: strcat(Postfix, "+"); strcat(Postfix, " "); break;
+					case 45: strcat(Postfix, "-"); strcat(Postfix, " "); break;
+					case 47: strcat(Postfix, "/"); strcat(Postfix, " "); break;
+					}
+					if (Is_empty(Operator_stack))
+						Operator_stack = Create_stacK();
 				}
-				if (Is_empty(Operator_stack))
-					Operator_stack = Create_stacK();
+				Push(Operator_stack, token[0]);
 			}
-			Push(Operator_stack, token[0]);
-			//
-			//if (Is_empty(Operator_stack))
-			//	Operator_stack = Create_stacK();
 		}
 	}
 }
@@ -86,6 +96,8 @@ void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 int Prec(char Operator)
 {
 	switch (Operator) {
+	case '(': case ')':
+		return 0;
 	case '*': case '/':
 		return 1;
 	case '+' : case '-' :
@@ -117,8 +129,6 @@ char* Make_postfix(char* Infix)
 		case 45: strcat(Postfix, "-"); strcat(Postfix, " "); break;
 		case 47: strcat(Postfix, "/"); strcat(Postfix, " "); break;
 		}
-	//if (Is_empty(Operator_stack))
-	//	Operator_stack = Create_stacK();
 	return Postfix;
 }
 
