@@ -1,5 +1,4 @@
 #include "postfix.h"
-#include "stack.h"
 #include <stdio.h>
 
 int main()
@@ -9,7 +8,7 @@ int main()
 	char Postfix[BUFFER_SIZE] = "\0";
 
 	while (1) {
-		printf("식을 입력하세요 : \n");
+		printf("식을 입력하세요\n");
 		printf("중위표기식 : ");
 
 		if (read_line(stdin, command, BUFFER_SIZE) > 0) {
@@ -18,9 +17,9 @@ int main()
 				break;
 			}
 
-			printf("\nInfix : %s", strcpy(Infix, command));
-			printf("\nPostfix : %s", strcpy(Postfix, Make_postfix(Infix)));
-			printf("\nResult : %d\n", Eval(Postfix));
+			printf("Infix : %s\n", strcpy(Infix, command));
+			printf("Postfix : %s\n\n", strcpy(Postfix, Make_postfix(Infix)));
+			//printf("\nResult : %d\n", Eval(Postfix));
 		}
 		else {
 			printf("다시입력해주세요.\n");
