@@ -1,3 +1,4 @@
+// 괄호 없는 중위표기식 --> 후위표기식 변환
 #include "postfix.h"
 #include "stack.h"
 
