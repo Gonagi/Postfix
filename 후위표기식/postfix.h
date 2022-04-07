@@ -5,6 +5,7 @@
 #endif
 #include <stdio.h>
 #include <stdlib.h>
+#include <crtdbg.h>
 #include "stack.h"
 #define BUFFER_SIZE 100
 

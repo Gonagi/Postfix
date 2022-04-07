@@ -21,6 +21,7 @@ int main()
 			printf("Infix : %s\n", strcpy(Infix, command));
 			printf("Postfix : %s\n", strcpy(Postfix, Make_postfix(Infix)));
 			printf("Result : %d\n\n", Eval(Postfix));
+			_CrtDumpMemoryLeaks();
 		}
 		else {
 			printf("다시입력해주세요.\n");
