@@ -1,4 +1,4 @@
-// 괄호 없는 중위표기식 --> 후위표기식 변환
+// 괄호 있는 최종 중위표기식 --> 후위표기식 변환
 #include "postfix.h"
 #include "stack.h"
 
@@ -13,7 +13,7 @@ struct stack {
 
 void Push_with_Bracket(char* Postfix, Stack Operator_stack)
 {
-	while (Peek(Operator_stack) != '(') {
+	while (Peek(Operator_stack) != '(') {	// 닫는괄호 '('가 나올때까지 Pop
 		switch (Pop(Operator_stack)) {
 		case 42: strcat(Postfix, "*"); strcat(Postfix, " "); break;
 		case 43: strcat(Postfix, "+"); strcat(Postfix, " "); break;
@@ -22,16 +22,16 @@ void Push_with_Bracket(char* Postfix, Stack Operator_stack)
 		}
 	}
 	Pop(Operator_stack);	// '(' Pop
-		if (Is_empty(Operator_stack))
-			Operator_stack = Create_stacK();
+	if (Is_empty(Operator_stack))
+		Operator_stack = Create_stacK();
 }
 
 bool Is_bracket(Stack Operator_stack)
 {
 	Node n = Operator_stack->top;
-	while (n != NULL && n->data != 40)
+	while (n != NULL && n->data != 40)	// Operator_stack의 node를 하나하나 확인하여 여는괄호 '('가 있는지 확인
 		n = n->next;
-	if (n->data == 40)
+	if (n->data == 40)	// 존재하는 경우
 		return true;
 	else
 		return false;
@@ -67,17 +67,23 @@ int Eval(char* Postfix)
 
 void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 {
-	if (Is_empty(Operator_stack) || token[0] == '(')	// 스택이 비었을시 또는 '('일때
+	if (Is_empty(Operator_stack) || token[0] == '(')	// 스택이 비었을시 또는 token이 '('일때 Push
 		Push(Operator_stack, token[0]);
 	else {
-		if ((Prec(Peek(Operator_stack)) > Prec(token[0]) || Is_bracket(Operator_stack)) && token[0] != ')')		// 스택(+) > 토큰(*)
+		if ((Prec(Peek(Operator_stack)) > Prec(token[0]) || Is_bracket(Operator_stack)) && token[0] != ')') 
+			// token이 닫는괄호 ')'가 아니면서 
+			// 스택의 연산자 우선순위가 토큰보다 낮거나 ex) 스택(+) > 토큰(*)
+			// 스택에 여는괄호 '('가 존재할때																		
 			Push(Operator_stack, token[0]);	// 스택에 * Push
-		else {	// 스택(*) <= 토큰(*+)
+
+		else {	// token이 닫는괄호 ')'이거나
+				// 스택의 연산자 우선순위가 토큰보다 높거나 같으면서 ex) 스택(*) <= 토큰(*+)
+				// 스택에 여는괄호가 존재하지 않을때
 			if (token[0] = ')') 	// token이 닫는괄호일때
 				Push_with_Bracket(Postfix, Operator_stack);
 			else {
-				while (!Is_empty(Operator_stack) && Prec(Peek(Operator_stack)) <= Prec(token[0])) {	// 스택이 비어있지 않은 경우 && \
-																		*				+				스택에 있는 연산자의 우선순위가 높을시
+				while (!Is_empty(Operator_stack) && Prec(Peek(Operator_stack)) <= Prec(token[0])) {	
+					// 스택이 비어있지 않은 경우 && 스택에 있는 연산자의 우선순위가 토큰의  우선순위보다 높을때
 					switch (Pop(Operator_stack)) {
 					case 42: strcat(Postfix, "*"); strcat(Postfix, " "); break;
 					case 43: strcat(Postfix, "+"); strcat(Postfix, " "); break;
@@ -89,6 +95,8 @@ void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 				}
 				Push(Operator_stack, token[0]);
 			}
+			if (Is_empty(Operator_stack))
+				Operator_stack = Create_stacK();
 		}
 	}
 }
@@ -122,7 +130,7 @@ char* Make_postfix(char* Infix)
 		}
 		token = strtok(NULL, " ");
 	}
-	while(!Is_empty(Operator_stack))
+	while(!Is_empty(Operator_stack))	// 연산자 스택이 빌때까지 Pop
 		switch (Pop(Operator_stack)) {
 		case 42: strcat(Postfix, "*"); strcat(Postfix, " "); break;
 		case 43: strcat(Postfix, "+"); strcat(Postfix, " "); break;
