@@ -2,6 +2,26 @@
 #include "postfix.h"
 #include "stack.h"
 
+struct node {
+	Item data;
+	Node next;
+};
+
+struct stack {
+	Node top;
+};
+
+bool Is_bracket(Stack Operator_stack)
+{
+	Node n = Operator_stack->top;
+	while (n != NULL && n->data != 40)
+		n = n->next;
+	if (n->data == 40)
+		return true;
+	else
+		return false;
+}
+
 int Eval(char* Postfix)
 {
 	Stack Operand_stack = Create_stacK();
@@ -36,6 +56,11 @@ void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 	if (Is_empty(Operator_stack))	// 스택이 비었을시
 		Push(Operator_stack, token[0]);
 	else {
+
+
+
+
+
 		if (Prec(Peek(Operator_stack)) > Prec(token[0]))		// 스택(+) > 토큰(*)
 			Push(Operator_stack, token[0]);	// 스택에 * Push
 		else {	// 스택(*) <= 토큰(*+)

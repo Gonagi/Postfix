@@ -11,6 +11,7 @@
 
 static char Operator[] = "+-*/";
 
+bool Is_bracket(Stack);
 int Eval(char*);
 void Make_operator_postfix(char*, Stack, char*);
 int Prec(char);
