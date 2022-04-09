@@ -31,7 +31,10 @@ bool Is_bracket(Stack Operator_stack)
 	Node n = Operator_stack->top;
 	while (n != NULL && n->data != 40)	// Operator_stack의 node를 하나하나 확인하여 여는괄호 '('가 있는지 확인
 		n = n->next;
-	if (n->data == 40)	// 존재하는 경우
+
+	if (n == NULL)	// Operator_stack에 '('이 아닌 연산자가 하나만 있는 경우 
+		return false;	
+	else if (n->data == 40)	// Operator_stack에 '('가 존재하는 경우
 		return true;
 	else
 		return false;
@@ -79,7 +82,7 @@ void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 		else {	// token이 닫는괄호 ')'이거나
 				// 스택의 연산자 우선순위가 토큰보다 높거나 같으면서 ex) 스택(*) <= 토큰(*+)
 				// 스택에 여는괄호가 존재하지 않을때
-			if (token[0] = ')') 	// token이 닫는괄호일때
+			if (token[0] == ')') 	// token이 닫는괄호일때
 				Push_with_Bracket(Postfix, Operator_stack);
 			else {
 				while (!Is_empty(Operator_stack) && Prec(Peek(Operator_stack)) <= Prec(token[0])) {	
@@ -95,8 +98,8 @@ void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 				}
 				Push(Operator_stack, token[0]);
 			}
-			if (Is_empty(Operator_stack))
-				Operator_stack = Create_stacK();
+			//if (Is_empty(Operator_stack))
+			//	Operator_stack = Create_stacK();
 		}
 	}
 }
