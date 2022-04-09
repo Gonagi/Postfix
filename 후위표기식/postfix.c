@@ -98,8 +98,6 @@ void Make_operator_postfix(char* Postfix, Stack Operator_stack, char* token)
 				}
 				Push(Operator_stack, token[0]);
 			}
-			//if (Is_empty(Operator_stack))
-			//	Operator_stack = Create_stacK();
 		}
 	}
 }
